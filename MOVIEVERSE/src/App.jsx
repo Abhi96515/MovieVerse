@@ -1,22 +1,46 @@
 import { useEffect, useState } from 'react'
-
+import {BrowserRouter,Route,Routes} from 'react-router-dom'
 import { fetchDataFromApi } from './utils/api'
-function App() {
- 
-  useEffect(()=>{
-    apiTesting();
-  },[])
+import { useSelector, useDispatch } from 'react-redux';
+import { getApiConfiguration } from './store/homeSlice';
+import Header from './components/header/Header'
+import Footer from './components/footer/Footer'
+import Home from './pages/home/Home';
+import Detail from './pages/details/Detail';
+import SearchResult from './pages/searchResult/SearchResult';
+import Explore from './pages/explore/Explore.jsx';
+import PageNotFound from './pages/404/PageNotFound';
 
-  const apiTesting=()=>{
-  fetchDataFromApi("/movie/popular").then((res)=> {console.log(res)})
+
+function App() {
+
+    const dispatch = useDispatch();
+    const {url} = useSelector((state)=>
+      state.home)
+      console.log(url)
+        useEffect(()=>{
+          apiTesting();
+        },[])
+
+      const apiTesting=()=>{
+      fetchDataFromApi("/movie/popular").then((res)=> {
+        console.log(res)
+        dispatch(getApiConfiguration(res))
+        })
   }
   return (
     <>
-      <div>
-        <div className="App">App
-
-        </div>
-      </div>
+     <BrowserRouter>
+       <Header/>
+        <Routes>
+          <Route path='/' element={<Home/>} />
+          <Route path='/:mediaType/:id' element={<Detail/>} />
+          <Route path='/search/:query' element={<SearchResult/>} />
+          <Route path='/explore/:mediaType' element={<Explore/>} />
+          <Route path='*' element={<PageNotFound/>} />
+          </Routes>
+        <Footer/>
+     </BrowserRouter>
     </>
   )
 }

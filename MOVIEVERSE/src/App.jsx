@@ -21,7 +21,7 @@ function App() {
         useEffect(()=>{
           fetchApiConfig();
         },[])
-
+ 
       const fetchApiConfig=()=>{
       fetchDataFromApi("/configuration").then((res)=> {
         console.log(res)

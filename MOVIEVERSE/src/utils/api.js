@@ -18,4 +18,4 @@ export const fetchDataFromApi = async (url, params) => {
         console.log(err);
         return err;
     }
-};
+}; 
